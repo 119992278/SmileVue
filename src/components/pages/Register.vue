@@ -23,7 +23,7 @@
             required
         />
         <div class="register-button">
-           <van-button type="primary" @click="axiosRegisterUser" size="large">马上注册</van-button>
+           <van-button type="primary" @click="axiosRegisterUser" size="large">马上注册1234</van-button>
         </div>
        </div>
 
