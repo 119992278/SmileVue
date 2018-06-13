@@ -23,7 +23,7 @@
             required
         />
         <div class="register-button">
-           <van-button type="primary" @click="axiosRegisterUser" size="large">马上注册1234</van-button>
+           <van-button type="primary" @click="axiosRegisterUser" :loading="openLoading" size="large">马上注册1234</van-button>
         </div>
        </div>
 
@@ -31,37 +31,47 @@
 </template>
 
 <script>
-import axios from "axios";
-import url from "@/serviceAPI.config.js";
+import axios from 'axios'
+import url from '@/serviceAPI.config.js'
+import { Toast } from 'vant'
 export default {
-  data() {
+  data () {
     return {
-      username: "",
-      password: ""
-    };
+      username: '',
+      password: '',
+      openLoading: false
+    }
   },
   methods: {
-    goBack() {
-      this.$router.go(-1);
+    goBack () {
+      this.$router.go(-1)
     },
-    axiosRegisterUser() {
+    axiosRegisterUser () {
       axios({
         url: url.registerUser,
-        method: "post",
+        method: 'post',
         data: {
-          username: this.username,
+          userName: this.username,
           password: this.password
         }
       })
         .then(response => {
-          console.log(response);
+          Toast.clear()
+          if (response.data.code === 200) {
+            Toast.success('注册成功')
+          } else {
+            console.log(response.data.message)
+            Toast.fail('注册失败')
+            this.openLoading = false
+          }
         })
         .catch(error => {
-          console.log(error);
-        });
+          console.log(error)
+          this.openLoading = false
+        })
     }
   }
-};
+}
 </script>
 
 <style scoped>
