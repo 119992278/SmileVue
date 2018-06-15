@@ -51,129 +51,134 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
-import url from '@/serviceAPI.config.js'
-import swiperDefault from '@/components/swiper/swiperDefault'
-import floorComponent from '@/components/component/floorComponent'
-import goodsInfo from '../component/goodsInfoComponent'
-import {toMoney} from '@/filter/moneyFilter.js'
+import axios from "axios";
+import url from "@/serviceAPI.config.js";
+import swiperDefault from "@/components/swiper/swiperDefault";
+import floorComponent from "@/components/component/floorComponent";
+import goodsInfo from "@/components/component/goodsInfoComponent";
+import { toMoney } from "@/filter/moneyFilter.js";
 export default {
-  data () {
+  data() {
     return {
       hotGoods: [], // 热卖商品
-      locationIcon: require('@/assets/images/icon-location.png'),
+      locationIcon: require("@/assets/images/location.png"),
       category: [],
       adBanner: {},
-      bannerPicArray: [],
+      bannerPicArray: [
+        { image: require("@/assets/images/banner/20180407175040_1780.jpg") },
+        { image: require("@/assets/images/banner/20180407175111_9509.jpg") },
+        { image: require("@/assets/images/banner/20180407175142_6947.jpg") }
+      ],
       floor1: []
-    }
+    };
   },
   filters: {
-    moneyFilter (money) {
-      return toMoney(money)
+    moneyFilter(money) {
+      return toMoney(money);
     }
   },
   components: {
-    swiperDefault, floorComponent, goodsInfo
+    swiperDefault,
+    floorComponent,
+    goodsInfo
   },
-  created () {
+  created() {
     axios({
       url: url.getShoppingMallInfo,
-      method: 'get'
+      method: "get"
     }).then(response => {
-      this.category = response.data.data.category
-      this.adBanner = response.data.data.advertesPicture
-      this.bannerPicArray = response.data.data.slides
-      this.recommendGoods = response.data.data.recommend
-      this.floorName = response.data.data.floorName
-      this.floor1 = response.data.data.floor1 // 楼层1数据
-      this.hotGoods = response.data.data.hotGoods
-    })
+      //this.bannerPicArray = response.data.data.slides
+      this.category = response.data.data.category;
+      this.adBanner = response.data.data.advertesPicture;
+      this.recommendGoods = response.data.data.recommend;
+      this.floorName = response.data.data.floorName;
+      this.floor1 = response.data.data.floor1; // 楼层1数据
+      this.hotGoods = response.data.data.hotGoods;
+    });
   }
-}
+};
 </script>
 
 <style scoped>
-  .search-bar{
-      height: 2.2rem;
-      background-color: #e5017d;
-      line-height:2.2rem;
-  }
-  .search-input{
-      width:100%;
-      height: 1.3rem;
-      border-top:0px;
-      border-left:0px;
-      border-right:0px;
-      border-bottom: 1px solid 1px !important ;
-      background-color: #e5017d;
-      color:#fff;
-  }
-  .location-icon{
-      padding-top: .2rem;
-      padding-left: .3rem;
-  }
-  .swiper-area{
-        width:100%;
-        clear:both;
-  }
-   .type-bar{
-      background-color: #fff;
-      margin:0 .3rem .3rem .3rem;
-      border-radius: .3rem;
-      font-size:14px;
-      display: flex;
-      flex-direction:row;
-      flex-wrap:nowrap;
-  }
-  .type-bar div{
-      padding: .3rem;
-      font-size: 12px;
-      text-align: center;
-  }
-   .recommend-area{
-       background-color: #fff;
-       margin-top: .3rem;
-  }
-  .recommend-title{
-      border-bottom:1px solid #eee;
-      font-size:14px;
-      padding:.2rem;
-      color:#e5017d;
-  }
-  .recommend-body{
-       border-bottom: 1px solid #eee;
-   }
+.search-bar {
+  height: 2.2rem;
+  background-color: #e5017d;
+  line-height: 2.2rem;
+}
+.search-input {
+  width: 100%;
+  height: 1.3rem;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 1px solid 1px !important ;
+  background-color: #e5017d;
+  color: #fff;
+}
+.location-icon {
+  padding-top: 0.2rem;
+  padding-left: 0.3rem;
+}
+.swiper-area {
+  width: 100%;
+  clear: both;
+}
+.type-bar {
+  background-color: #fff;
+  margin: 0 0.3rem 0.3rem 0.3rem;
+  border-radius: 0.3rem;
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.type-bar div {
+  padding: 0.3rem;
+  font-size: 12px;
+  text-align: center;
+}
+.recommend-area {
+  background-color: #fff;
+  margin-top: 0.3rem;
+}
+.recommend-title {
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  padding: 0.2rem;
+  color: #e5017d;
+}
+.recommend-body {
+  border-bottom: 1px solid #eee;
+}
 
-  .recommend-item{
-      width:99%;
-      border-right: 1px solid #eee;
-      font-size: 12px;
-      text-align: center;
-  }
-  .floor-anomaly{
-      display: flex;
-      flex-direction:row;
-      background-color: #fff;
-      border-bottom:1px solid #ddd;
-  }
-  .floor-anomaly div{
-     width:10rem;
+.recommend-item {
+  width: 99%;
+  border-right: 1px solid #eee;
+  font-size: 12px;
+  text-align: center;
+}
+.floor-anomaly {
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+.floor-anomaly div {
+  width: 10rem;
 
-     box-sizing: border-box;
-     -webkit-box-sizing: border-box;
-  }
-  .floor-one{
-      border-right:1px solid #ddd;
-
-  }
-  .floor-two{
-      border-bottom:1px solid #ddd;
-  }
-  .hot-area{
-      text-align: center;
-      font-size:14px;
-      height: 1.8rem;
-      line-height:1.8rem;
-  }
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.floor-one {
+  border-right: 1px solid #ddd;
+}
+.floor-two {
+  border-bottom: 1px solid #ddd;
+}
+.hot-area {
+  text-align: center;
+  font-size: 14px;
+  height: 1.8rem;
+  line-height: 1.8rem;
+}
 </style>

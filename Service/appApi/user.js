@@ -10,6 +10,8 @@ router.get('/register', async (ctx) => {
 })
 
 router.post('/register', async (ctx) => {
+  console.log(JSON.stringify(ctx.request.body))
+  console.log(JSON.stringify(ctx.request.url))
   const User = mongoose.model('User')// 取得Model
   let newUser = new User(ctx.request.body)// 把从前端接收的POST数据封装成一个新的user对象
   console.log('/register' + JSON.stringify(newUser))

@@ -12,6 +12,7 @@
             icon="clear"
             placeholder="请输入用户名"
             required
+            error-message
             @click-icon="username = ''"
         />
 
@@ -23,7 +24,7 @@
             required
         />
         <div class="register-button">
-           <van-button type="primary" @click="axiosRegisterUser" :loading="openLoading" size="large">马上注册1234</van-button>
+           <van-button type="primary" @click="registerAction" :loading="openLoading" size="large" text='马上注册'></van-button>
         </div>
        </div>
 
@@ -33,18 +34,41 @@
 <script>
 import axios from 'axios'
 import url from '@/serviceAPI.config.js'
-import { Toast } from 'vant'
+import { Toast,Dialog } from 'vant'
 export default {
   data () {
     return {
       username: '',
       password: '',
-      openLoading: false
+      openLoading: false, // 是否开启用户的Loading
+      usernameErrorMsg: '', // 当用户名出现错误的时候
+      passwordErrorMsg: '' // 当密码出现错误的时候
     }
   },
   methods: {
     goBack () {
       this.$router.go(-1)
+    },
+    checkForm () {
+      let isOk = true
+      if (this.username.length < 5) {
+        this.usernameErrorMsg = '用户名不能小于5位'
+        Toast(this.usernameErrorMsg);
+        isOk = false
+      } else {
+        this.usernameErrorMsg = ''
+      }
+      if (this.password.length < 6) {
+        this.passwordErrorMsg = '密码不能少于6位'
+        Toast(this.passwordErrorMsg);
+        isOk = false
+      } else {
+        this.passwordErrorMsg = ''
+      }
+      return isOk
+    },
+    registerAction () {
+      this.checkForm() && this.axiosRegisterUser()
     },
     axiosRegisterUser () {
       axios({

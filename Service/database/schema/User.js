@@ -1,5 +1,5 @@
 const mongoose = require('mongoose') // 引入Mongoose
-const Schema = mongoose.Schema // 声明Schema
+const Schema = mongoose.Schema // 数据库模型
 let ObjectId = Schema.Types.ObjectId // 声明Object类型
 
 // 创建我们的用户Schema
@@ -9,7 +9,8 @@ const userSchema = new Schema({
   password: String,
   createAt: {type: Date, default: Date.now()},
   lastLoginAt: {type: Date, default: Date.now()}
-
+}, {
+  collection: 'user'
 })
 
 // 发布模型

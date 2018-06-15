@@ -7,15 +7,9 @@ exports.initSchemas = () => {
   glob.sync(resolve(__dirname, './schema/', '**/*.js')).forEach(require)
 }
 exports.connect = () => {
-  // 连接数据库
-  mongoose.connect(db)
-
+  mongoose.connect(db) // 连接数据库
   let maxConnectTimes = 0
-
   return new Promise((resolve, reject) => {
-    // 把所有连接放到这里
-
-    // 增加数据库监听事件
     mongoose.connection.on('disconnected', err => {
       console.log('***********数据库断开***********')
       if (maxConnectTimes < 3) {
@@ -26,7 +20,6 @@ exports.connect = () => {
         throw new Error('数据库出现问题，程序无法搞定，请人为修理......')
       }
     })
-
     mongoose.connection.on('error', err => {
       console.log('***********数据库错误***********')
       if (maxConnectTimes < 3) {
