@@ -12,7 +12,7 @@ router.get('/register', async (ctx) => {
 router.post('/register', async (ctx) => {
   const User = mongoose.model('User')// 取得Model
   let newUser = new User(ctx.request.body)// 把从前端接收的POST数据封装成一个新的user对象
-  console.log('/register' + JSON.stringify(newUser))
+  console.log('/register(这是分支测试)' + JSON.stringify(newUser))
   await newUser.save().then(() => { // 用mongoose的save方法直接存储，然后判断是否成功，返回相应的结果
     ctx.body = {
       code: 200, message: '注册成功'
