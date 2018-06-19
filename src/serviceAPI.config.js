@@ -3,6 +3,7 @@ const LOCALURL = 'http://localhost:3000/'
 const URL = {
   getShoppingMallInfo: BASEURL + 'getShoppingMallInfo',
   getGoodsInfo: LOCALURL + 'getGoodsInfo',
-  registerUser: LOCALURL + 'user/register' // 用户注册接口
+  registerUser: LOCALURL + 'user/register', // 注册接口
+  loginUser: LOCALURL + 'user/login' // 登录接口
 }
 module.exports = URL

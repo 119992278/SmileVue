@@ -4,8 +4,9 @@ let router = new Router()
 router.get('/', async (ctx) => {
   ctx.body = '请设置对应接口.'
 })
+// 插入数据
 router.get('/insertUser', async (ctx) => {
-  const User = mongoose.model('User')// 取得Model
+  const User = mongoose.model('User')
   let newUser = new User({'userName': 'test.js', 'password': '32'})
   console.log('/insert' + JSON.stringify(newUser))
   await newUser.save().then(() => {
@@ -20,11 +21,10 @@ router.get('/insertUser', async (ctx) => {
     }
   })
 })
-
+// 插入数据
 router.get('/insertFriend', async (ctx) => {
-  const Friend = mongoose.model('Friend')// 取得Model
+  const Friend = mongoose.model('Friend')
   let newFriend = new Friend({'friendName': '朋友123'})
-  console.log('/insert' + JSON.stringify(newFriend))
   await newFriend.save().then(() => {
     ctx.body = {
       code: 200,
@@ -37,9 +37,16 @@ router.get('/insertFriend', async (ctx) => {
     }
   })
 })
+// 查询ONE数据
+router.get('/findOne', async (ctx) => {
+  const User = mongoose.model('User')
+  let results = await User.findOne({userName: 'chanjoey'}).exec()
+  ctx.body = results
+})
+// 查询ALL数据
 router.get('/findAll', async (ctx) => {
-  const Friend = mongoose.model('Friend')// 取得Model
-  let results = await Friend.find()
+  const User = mongoose.model('User')
+  let results = await User.find()
   ctx.body = results
 })
 

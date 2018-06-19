@@ -10,20 +10,39 @@ router.get('/register', async (ctx) => {
 })
 
 router.post('/register', async (ctx) => {
-  console.log(JSON.stringify(ctx.request.body))
-  console.log(JSON.stringify(ctx.request.url))
   const User = mongoose.model('User')// 取得Model
   let newUser = new User(ctx.request.body)// 把从前端接收的POST数据封装成一个新的user对象
   console.log('/register' + JSON.stringify(newUser))
   await newUser.save().then(() => { // 用mongoose的save方法直接存储，然后判断是否成功，返回相应的结果
-    ctx.body = {// 成功返回code=200，并返回成功信息
-      code: 200,
-      message: '注册成功'
+    ctx.body = {
+      code: 200, message: '注册成功'
     }
   }).catch(error => {
-    ctx.body = {// 失败返回code=500，并返回错误信息
-      code: 500,
-      message: error
+    ctx.body = {
+      code: 500, message: error
+    }
+  })
+})
+
+router.post('/login', async (ctx) => {
+  let loginUser = ctx.request.body
+  console.log('/loginUser' + JSON.stringify(loginUser))
+  let userName = loginUser.userName
+  let password = loginUser.password
+  const User = mongoose.model('User')
+  await User.findOne({userName: userName}).exec().then(async (result) => {
+    console.log(JSON.stringify(result))
+    if (result) {
+      let newUser = new User()
+      await newUser.comparePassword(password, result.password).then(isMatch => {
+        console.log('isMatch=' + JSON.stringify(isMatch))
+        ctx.body = {code: 200, message: isMatch}
+      }).catch(error => {
+        console.log(error)
+        ctx.body = {code: 500, message: error}
+      })
+    } else {
+      ctx.body = {code: 501, message: '用户名不存在'}
     }
   })
 })

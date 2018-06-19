@@ -14,7 +14,7 @@ router.use('/user', user.routes()) // http://localhost:3000/user 调用路由.
 router.use('/home', home.routes())
 router.use('/test', test.routes())
 router.get('*', async (ctx, next) => {
-  ctx.body = { status: 404 }
+  ctx.body = { status: '请请求对应接口' }
 })
 app.use(router.routes()) // 加载路由中间件
 app.use(router.allowedMethods())

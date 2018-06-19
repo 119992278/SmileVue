@@ -51,30 +51,30 @@
     </div>
 </template>
 <script>
-import axios from "axios";
-import url from "@/serviceAPI.config.js";
-import swiperDefault from "@/components/swiper/swiperDefault";
-import floorComponent from "@/components/component/floorComponent";
-import goodsInfo from "@/components/component/goodsInfoComponent";
-import { toMoney } from "@/filter/moneyFilter.js";
+import axios from 'axios'
+import url from '@/serviceAPI.config.js'
+import swiperDefault from '@/components/swiper/swiperDefault'
+import floorComponent from '@/components/component/floorComponent'
+import goodsInfo from '@/components/component/goodsInfoComponent'
+import { toMoney } from '@/filter/moneyFilter.js'
 export default {
-  data() {
+  data () {
     return {
       hotGoods: [], // 热卖商品
-      locationIcon: require("@/assets/images/location.png"),
+      locationIcon: require('@/assets/images/location.png'),
       category: [],
       adBanner: {},
       bannerPicArray: [
-        { image: require("@/assets/images/banner/20180407175040_1780.jpg") },
-        { image: require("@/assets/images/banner/20180407175111_9509.jpg") },
-        { image: require("@/assets/images/banner/20180407175142_6947.jpg") }
+        { image: require('@/assets/images/banner/20180407175040_1780.jpg') },
+        { image: require('@/assets/images/banner/20180407175111_9509.jpg') },
+        { image: require('@/assets/images/banner/20180407175142_6947.jpg') }
       ],
       floor1: []
-    };
+    }
   },
   filters: {
-    moneyFilter(money) {
-      return toMoney(money);
+    moneyFilter (money) {
+      return toMoney(money)
     }
   },
   components: {
@@ -82,21 +82,21 @@ export default {
     floorComponent,
     goodsInfo
   },
-  created() {
+  created () {
     axios({
       url: url.getShoppingMallInfo,
-      method: "get"
+      method: 'get'
     }).then(response => {
-      //this.bannerPicArray = response.data.data.slides
-      this.category = response.data.data.category;
-      this.adBanner = response.data.data.advertesPicture;
-      this.recommendGoods = response.data.data.recommend;
-      this.floorName = response.data.data.floorName;
-      this.floor1 = response.data.data.floor1; // 楼层1数据
-      this.hotGoods = response.data.data.hotGoods;
-    });
+      // this.bannerPicArray = response.data.data.slides
+      this.category = response.data.data.category
+      this.adBanner = response.data.data.advertesPicture
+      this.recommendGoods = response.data.data.recommend
+      this.floorName = response.data.data.floorName
+      this.floor1 = response.data.data.floor1 // 楼层1数据
+      this.hotGoods = response.data.data.hotGoods
+    })
   }
-};
+}
 </script>
 
 <style scoped>
