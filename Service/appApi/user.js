@@ -26,7 +26,7 @@ router.post('/register', async (ctx) => {
 
 router.post('/login', async (ctx) => {
   let loginUser = ctx.request.body
-  console.log('/loginUser' + JSON.stringify(loginUser))
+  console.log('/loginUser1234' + JSON.stringify(loginUser))
   let userName = loginUser.userName
   let password = loginUser.password
   const User = mongoose.model('User')
