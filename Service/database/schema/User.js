@@ -7,10 +7,20 @@ const SALT_WORK_FACTOR = 10 // 定义加密密码计算强度
 // 创建我们的用户模式
 const userSchema = new Schema({
   UserId: ObjectId,
-  userName: {unique: true, type: String},
-  password: String,
-  createAt: {type: Date, default: Date.now()},
-  lastLoginAt: {type: Date, default: Date.now()}
+  userName: {
+    unique: true,
+    type: String
+  },
+  passWord: String,
+  createAt: {
+    type: Date,
+    default: Date.now()
+  },
+  lastLoginAt: {
+    type: Date,
+    default: Date.now()
+  },
+  token: String
 }, {
   collection: 'user'
 })
@@ -19,9 +29,9 @@ userSchema.pre('save', function (next) {
   console.log('save=' + JSON.stringify(this))
   bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
     if (err) return next(err)
-    bcrypt.hash(this.password, salt, (err, hash) => {
+    bcrypt.hash(this.passWord, salt, (err, hash) => {
       if (err) return next(err)
-      this.password = hash
+      this.passWord = hash
       next()
     })
   })

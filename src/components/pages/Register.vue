@@ -2,8 +2,10 @@
     <div>
        <van-nav-bar title="用户注册"
         left-text="返回"
+        right-text="登录"
         left-arrow
-        @click-left="goBack"/>
+        @click-left="goBack"
+        @click-right="goLogin"/>
 
         <div class="register-panel">
         <van-field
@@ -50,6 +52,9 @@ export default {
     goBack () {
       this.$router.go(-1)
     },
+    goLogin () {
+      this.$router.push('/login')
+    },
     checkForm () {
       let isOk = true
       if (this.username.length < 5) {
@@ -74,17 +79,16 @@ export default {
         url: url.registerUser,
         method: 'post',
         data: {
-          userName: this.username,
+          username: this.username,
           password: this.password
         }
       }).then(response => {
         Toast.clear()
         if (response.data.code === 200) {
           Toast.success('注册成功')
-          this.$router.push('/login')
+          // this.$router.push('/login')
         } else {
-          console.log(response.data.message)
-          Toast.fail('注册失败')
+          Toast.fail(response.data.message)
           this.openLoading = false
         }
       }).catch(error => {

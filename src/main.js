@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import '@/assets/css/c.css'
 import {Button, Row, Col, Swipe, SwipeItem, Lazyload, List, Field, NavBar, Toast, Loading} from 'vant'
 Vue.use(Button).use(Row).use(Col).use(Swipe).use(SwipeItem).use(Lazyload).use(List).use(Field).use(NavBar).use(Toast).use(Loading)
@@ -11,6 +12,7 @@ Vue.use(Button).use(Row).use(Col).use(Swipe).use(SwipeItem).use(Lazyload).use(Li
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

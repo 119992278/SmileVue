@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--search bar layout-->
-        <div class="search-bar">
+        <!-- <div class="search-bar">
             <van-row gutter="5">
                 <van-col span="3"><img :src="locationIcon" width="80%" class="location-icon" /></van-col>
                 <van-col span="16">
@@ -9,7 +9,7 @@
                 </van-col>
                 <van-col span="5"><van-button size="mini">查找</van-button></van-col>
             </van-row>
-        </div>
+        </div> -->
         <!--swipwer area-->
         <div class="swiper-area">
             <van-swipe :autoplay="1000">
@@ -51,12 +51,13 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import url from '@/serviceAPI.config.js'
 import swiperDefault from '@/components/swiper/swiperDefault'
 import floorComponent from '@/components/component/floorComponent'
 import goodsInfo from '@/components/component/goodsInfoComponent'
 import { toMoney } from '@/filter/moneyFilter.js'
+import axios from '@/axios.js'
 export default {
   data () {
     return {
@@ -65,9 +66,9 @@ export default {
       category: [],
       adBanner: {},
       bannerPicArray: [
-        { image: require('@/assets/images/banner/20180407175040_1780.jpg') },
-        { image: require('@/assets/images/banner/20180407175111_9509.jpg') },
-        { image: require('@/assets/images/banner/20180407175142_6947.jpg') }
+        // { image: require('@/assets/images/banner/20180407175040_1780.jpg') },
+        // { image: require('@/assets/images/banner/20180407175111_9509.jpg') },
+        // { image: require('@/assets/images/banner/20180407175142_6947.jpg') }
       ],
       floor1: []
     }
@@ -83,18 +84,32 @@ export default {
     goodsInfo
   },
   created () {
-    axios({
-      url: url.getShoppingMallInfo,
-      method: 'get'
-    }).then(response => {
-      // this.bannerPicArray = response.data.data.slides
-      this.category = response.data.data.category
-      this.adBanner = response.data.data.advertesPicture
-      this.recommendGoods = response.data.data.recommend
-      this.floorName = response.data.data.floorName
-      this.floor1 = response.data.data.floor1 // 楼层1数据
-      this.hotGoods = response.data.data.hotGoods
-    })
+    // this.getShoppingMallInfo()
+    this.getUsers()
+  },
+  methods: {
+    getShoppingMallInfo: function () {
+      axios({
+        url: url.getShoppingMallInfo,
+        method: 'get'
+      }).then(response => {
+        this.bannerPicArray = response.data.data.slides
+        this.category = response.data.data.category
+        this.adBanner = response.data.data.advertesPicture
+        this.recommendGoods = response.data.data.recommend
+        this.floorName = response.data.data.floorName
+        this.floor1 = response.data.data.floor1
+        this.hotGoods = response.data.data.hotGoods
+      })
+    },
+    getUsers: function () {
+      axios({
+        url: url.find,
+        method: 'get'
+      }).then(response => {
+        // console.log(response)
+      })
+    }
   }
 }
 </script>

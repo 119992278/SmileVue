@@ -2,8 +2,10 @@
     <div>
        <van-nav-bar title="用户登录"
         left-text="返回"
+        right-text="注册"
         left-arrow
-        @click-left="goBack"/>
+        @click-left="goBack"
+        @click-right="goRegister"/>
 
         <div class="register-panel">
         <van-field
@@ -48,13 +50,16 @@ export default {
   },
   created () {
     if (localStorage.userInfo) {
-      Toast.success('您已经登录')
-      this.$router.push('/')
+      // Toast.success('您已经登录')
+      // this.$router.push('/')
     }
   },
   methods: {
     goBack () {
       this.$router.go(-1)
+    },
+    goRegister () {
+      this.$router.push('/register')
     },
     checkForm () {
       let isOk = true
@@ -80,35 +85,28 @@ export default {
         url: url.loginUser,
         method: 'post',
         data: {
-          userName: this.username,
+          username: this.username,
           password: this.password
         }
-      }).then(response => {
-        Toast.clear()
-        if (response.data.code === 200 && response.data.message) {
-          Toast.success('登录成功')
-          this.$router.push('/')
-          new Promise((resolve, reject) => {
-            localStorage.userInfo = { userName: this.username }
-            setTimeout(() => {
-              resolve()
-            }, 500)
-          }).then(() => {
+      })
+        .then(response => {
+          Toast.clear()
+          if (response.data.code === 200 && response.data.userInfo) {
+            this.$store.dispatch('UserLogin', response.data.token)
             Toast.success('登录成功')
-            this.$router.push('/')
-          }).catch(err => {
-            Toast.fail('登录状态保存失败')
-            console.log(err)
-          })
-        } else {
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 2000)
+          } else {
+            Toast.fail('登录失败')
+            this.openLoading = false
+          }
+        })
+        .catch(error => {
+          console.log(error)
           Toast.fail('登录失败')
           this.openLoading = false
-        }
-      }).catch(error => {
-        console.log(error)
-        Toast.fail('登录失败')
-        this.openLoading = false
-      })
+        })
     }
   }
 }

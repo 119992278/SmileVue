@@ -1,48 +1,101 @@
+const moment = require('moment')
 const Router = require('koa-router')
 const mongoose = require('mongoose')
+const checkToken = require('../jwt/checkToken')
+const createToken = require('../jwt/createToken')
 let router = new Router()
-router.get('/', async (ctx) => {
-  console.log(JSON.stringify(ctx.request.body))
-  ctx.body = '这是用户操作首页'
-})
 router.get('/register', async (ctx) => {
   ctx.body = '这是用户注册页面'
 })
-
 router.post('/register', async (ctx) => {
-  const User = mongoose.model('User')// 取得Model
-  let newUser = new User(ctx.request.body)// 把从前端接收的POST数据封装成一个新的user对象
-  console.log('/register(这是分支测试123)' + JSON.stringify(newUser))
-  await newUser.save().then(() => { // 用mongoose的save方法直接存储，然后判断是否成功，返回相应的结果
-    ctx.body = {
-      code: 200, message: '注册成功'
-    }
-  }).catch(error => {
-    ctx.body = {
-      code: 500, message: error
+  const User = mongoose.model('User')
+  let newUser = new User({
+    userName: ctx.request.body.username,
+    passWord: ctx.request.body.password,
+    token: createToken(ctx.request.body.username)
+  })
+  await User.findOne({
+    userName: newUser.userName
+  }).then(async (hasUser) => {
+    if (hasUser) {
+      ctx.body = {
+        code: 500,
+        message: '用户已存在'
+      }
+    } else {
+      await newUser.save().then(() => {
+        ctx.body = {
+          code: 200,
+          message: '注册成功'
+        }
+      }).catch(error => {
+        ctx.body = {
+          code: 500,
+          message: error
+        }
+      })
     }
   })
 })
 
 router.post('/login', async (ctx) => {
-  let loginUser = ctx.request.body
-  console.log('/loginUser(主线测试)' + JSON.stringify(loginUser))
-  let userName = loginUser.userName
-  let password = loginUser.password
   const User = mongoose.model('User')
-  await User.findOne({userName: userName}).exec().then(async (result) => {
-    console.log(JSON.stringify(result))
+  let loginUser = ctx.request.body
+  let userName = loginUser.username
+  let passWord = loginUser.password
+  await User.findOne({
+    userName: userName
+  }).then(async (result) => {
     if (result) {
-      let newUser = new User()
-      await newUser.comparePassword(password, result.password).then(isMatch => {
-        console.log('isMatch=' + JSON.stringify(isMatch))
-        ctx.body = {code: 200, message: isMatch}
+      await new User().comparePassword(passWord, result.passWord).then(async (isMatch) => {
+        if (isMatch === true) {
+          await User.update({
+            userName: userName
+          }, {
+            $set: {
+              lastLoginAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+              token: createToken(userName)
+            }
+          }).then(() => {
+            ctx.body = {
+              code: 200,
+              userInfo: {userName: result.userName},
+              token: createToken(userName)
+            }
+          })
+        } else {
+          ctx.body = {
+            code: 200,
+            userInfo: null
+          }
+        }
       }).catch(error => {
-        console.log(error)
-        ctx.body = {code: 500, message: error}
+        ctx.body = {
+          code: 500,
+          userInfo: null,
+          error: error
+        }
       })
     } else {
-      ctx.body = {code: 501, message: '用户名不存在'}
+      ctx.body = {
+        code: 501,
+        userInfo: null
+      }
+    }
+  })
+})
+
+router.get('/find', checkToken, async (ctx) => {
+  const User = mongoose.model('User')
+  await User.find().then((result) => {
+    ctx.body = {
+      code: 200,
+      details: result
+    }
+  }).catch(error => {
+    ctx.body = {
+      code: 500,
+      message: error
     }
   })
 })
