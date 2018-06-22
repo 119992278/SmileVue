@@ -1,11 +1,12 @@
 <template>
     <div>
        <van-nav-bar title="用户注册"
-        left-text="返回"
-        right-text="登录"
-        left-arrow
-        @click-left="goBack"
-        @click-right="goLogin"/>
+            left-text="返回"
+            right-text="登录"
+            left-arrow
+            @click-left="goBack"
+            @click-right="goLogin"
+        />
 
         <div class="register-panel">
         <van-field

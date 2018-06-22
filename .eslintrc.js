@@ -27,6 +27,7 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     "no-var": 1, //禁用var，用let和const代替
-    "strict": 1 //使用严格模式
+    "strict": 1, //使用严格模式,
+    "no-unused-vars": 1, //声明变量
   }
 }

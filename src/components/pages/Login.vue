@@ -64,13 +64,13 @@ export default {
     checkForm () {
       let isOk = true
       if (this.username.length < 5) {
-        this.usernameErrorMsg = '用户名不能小于5位(分支1)'
+        this.usernameErrorMsg = '用户名不能小于5位'
         isOk = false
       } else {
         this.usernameErrorMsg = ''
       }
       if (this.password.length < 6) {
-        this.passwordErrorMsg = '密码不能少于6位(分支1)'
+        this.passwordErrorMsg = '密码不能少于6位'
         isOk = false
       } else {
         this.passwordErrorMsg = ''

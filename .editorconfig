@@ -1,10 +1,9 @@
 root = true
 
-[*]
-charset = utf-8
-indent_style = space
-indent_size = 2
-end_of_line = lf
-insert_final_newline = true
-trim_trailing_whitespace = true
-tab_width = 50
+[*]    // 对所有文件应用下面的规则
+charset = utf-8                    // 编码规则用utf-8
+indent_style = space               // 缩进用空格
+indent_size = 2                    // 缩进数量为2个空格
+end_of_line = lf                   // 换行符格式
+insert_final_newline = true        // 是否在文件的最后插入一个空行
+trim_trailing_whitespace = true    // 是否删除行尾的空格

@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--search bar layout-->
-        <!-- <div class="search-bar">
+        <div class="search-bar">
             <van-row gutter="5">
                 <van-col span="3"><img :src="locationIcon" width="80%" class="location-icon" /></van-col>
                 <van-col span="16">
@@ -9,7 +9,7 @@
                 </van-col>
                 <van-col span="5"><van-button size="mini">查找</van-button></van-col>
             </van-row>
-        </div> -->
+        </div>
         <!--swipwer area-->
         <div class="swiper-area">
             <van-swipe :autoplay="1000">
@@ -84,7 +84,7 @@ export default {
     goodsInfo
   },
   created () {
-    // this.getShoppingMallInfo()
+    this.getShoppingMallInfo()
     this.getUsers()
   },
   methods: {
