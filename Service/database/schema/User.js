@@ -7,6 +7,7 @@ const SALT_WORK_FACTOR = 10 // 定义加密密码计算强度
 // 创建我们的用户模式
 const userSchema = new Schema({
   UserId: ObjectId,
+  books: Object,
   userName: {
     unique: true,
     type: String

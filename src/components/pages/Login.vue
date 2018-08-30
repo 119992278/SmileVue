@@ -82,7 +82,7 @@ export default {
     },
     axiosLoginUser () {
       axios({
-        url: url.loginUser,
+        url: url.LOCALURL + 'user/login',
         method: 'post',
         data: {
           username: this.username,

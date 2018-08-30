@@ -77,7 +77,7 @@ export default {
     },
     axiosRegisterUser () {
       axios({
-        url: url.registerUser,
+        url: url.LOCALURL + 'user/register',
         method: 'post',
         data: {
           username: this.username,
@@ -87,7 +87,7 @@ export default {
         Toast.clear()
         if (response.data.code === 200) {
           Toast.success('注册成功')
-          // this.$router.push('/login')
+          this.$router.push('/login')
         } else {
           Toast.fail(response.data.message)
           this.openLoading = false

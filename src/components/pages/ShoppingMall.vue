@@ -41,11 +41,10 @@
         </div>
         <!--floor one area-->
         <floorComponent :floorData="this.floor1"></floorComponent>
-         <!-- <floorComponent :floorData="this.floor1" :floorTitle="this.floorName.floor1"></floorComponent> -->
          <!--Hot Area-->
         <van-row gutter="20">
             <van-col span="12" v-for="(item,index) in hotGoods" :key="index">
-                <goods-info :goodsImage="item.image" :goodsName="item.name" :goodsPrice="item.price"></goods-info>
+                <goodsInfo :goodsImage="item.image" :goodsName="item.name" :goodsPrice="item.price" :goodsId='item.goodsId'></goodsInfo>
             </van-col>
         </van-row>
     </div>
@@ -85,12 +84,18 @@ export default {
   },
   created () {
     this.getShoppingMallInfo()
-    this.getUsers()
   },
   methods: {
+    getTest: function () {
+      axios({
+        url: url.test,
+        method: 'get'
+      }).then(response => {
+      })
+    },
     getShoppingMallInfo: function () {
       axios({
-        url: url.getShoppingMallInfo,
+        url: url.BASEURL + 'getShoppingMallInfo',
         method: 'get'
       }).then(response => {
         this.bannerPicArray = response.data.data.slides
@@ -100,14 +105,6 @@ export default {
         this.floorName = response.data.data.floorName
         this.floor1 = response.data.data.floor1
         this.hotGoods = response.data.data.hotGoods
-      })
-    },
-    getUsers: function () {
-      axios({
-        url: url.find,
-        method: 'get'
-      }).then(response => {
-        // console.log(response)
       })
     }
   }
@@ -151,6 +148,7 @@ export default {
   padding: 0.3rem;
   font-size: 12px;
   text-align: center;
+  flex:1;
 }
 .recommend-area {
   background-color: #fff;

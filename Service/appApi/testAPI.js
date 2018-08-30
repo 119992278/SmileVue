@@ -1,5 +1,6 @@
 const Router = require('koa-router')
 const mongoose = require('mongoose')
+mongoose.set('debug', true)
 let router = new Router()
 const findUser = (userName) => {
   const User = mongoose.model('User')
@@ -53,6 +54,13 @@ router.get('/findOne', async (ctx) => {
 router.get('/findAll', async (ctx) => {
   const User = mongoose.model('User')
   let results = await User.find()
+  ctx.body = results
+})
+
+// 查询ALL数据
+router.get('/findGoods', async (ctx) => {
+  const Goods = mongoose.model('Goods')
+  let results = await Goods.find()
   ctx.body = results
 })
 
@@ -116,5 +124,25 @@ router.get('/remove', async (ctx) => {
       message: error
     }
   })
+})
+
+// join多表查询
+router.get('/findjoin', async (ctx) => {
+  const UserBooks = mongoose.model('UserBooks')
+  const Books = mongoose.model('Books')
+  let results = await UserBooks.findOne({book_id: '5b3b211fc78d1d09ec710379'}).exec()
+  let booksResult = await Books.find({book_id: '5b3b211fc78d1d09ec710379'}).exec()
+  results.books = booksResult
+  ctx.body = results
+})
+
+// Populate联表查询
+router.get('/findPopulate', async (ctx) => {
+  const CommentModel = mongoose.model('CommentModel')
+  // const StudentSchema = mongoose.model('StudentSchema')
+  // let results = await StudentSchema.create({username: '滴滴'})
+  // await CommentModel.create({content: '这是用户留言信息123456', author: results})
+  let results1 = await CommentModel.find({_id: '5b6a88f707135b30f4a7cc9e'}).populate('author').exec()
+  ctx.body = results1
 })
 module.exports = router

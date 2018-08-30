@@ -39,65 +39,63 @@ router.post('/register', async (ctx) => {
 })
 
 router.post('/login', async (ctx) => {
-  const User = mongoose.model('User')
-  let loginUser = ctx.request.body
-  let userName = loginUser.username
-  let passWord = loginUser.password
-  await User.findOne({
-    userName: userName
-  }).then(async (result) => {
-    if (result) {
-      await new User().comparePassword(passWord, result.passWord).then(async (isMatch) => {
-        if (isMatch === true) {
-          await User.update({
-            userName: userName
-          }, {
-            $set: {
-              lastLoginAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-              token: createToken(userName)
-            }
-          }).then(() => {
-            ctx.body = {
-              code: 200,
-              userInfo: {userName: result.userName},
-              token: createToken(userName)
-            }
-          })
-        } else {
-          ctx.body = {
-            code: 200,
-            userInfo: null
+  try {
+    const User = mongoose.model('User')
+    let loginUser = ctx.request.body
+    let userName = loginUser.username
+    let passWord = loginUser.password
+    let findOneResult = await User.findOne({
+      userName: userName
+    }).exec()
+    if (findOneResult) {
+      let isMatch = await new User().comparePassword(passWord, findOneResult.passWord)
+      if (isMatch === true) {
+        let result = await User.update({
+          userName: userName
+        }, {
+          $set: {
+            lastLoginAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            token: createToken(userName)
           }
-        }
-      }).catch(error => {
+        })
         ctx.body = {
-          code: 500,
-          userInfo: null,
-          error: error
+          code: 200,
+          userInfo: {
+            userName: result.userName
+          },
+          token: createToken(userName)
         }
-      })
-    } else {
-      ctx.body = {
-        code: 501,
-        userInfo: null
+      } else {
+        ctx.body = {
+          code: 200,
+          userInfo: null
+        }
       }
     }
-  })
+  } catch (err) {
+    ctx.body = {
+      code: 500,
+      message: err
+    }
+  }
+
+  return false
 })
 
 router.get('/find', checkToken, async (ctx) => {
-  const User = mongoose.model('User')
-  await User.find().then((result) => {
+  try {
+    const User = mongoose.model('User')
+    let result = await User.find().exec()
     ctx.body = {
       code: 200,
       details: result
     }
-  }).catch(error => {
+  } catch (err) {
     ctx.body = {
       code: 500,
-      message: error
+      message: err
     }
-  })
+  }
 })
 
 module.exports = router

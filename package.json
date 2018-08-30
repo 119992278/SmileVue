@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bcrypt": "^2.0.1",
+    "jsonp": "^0.2.1",
     "vant": "^1.1.2",
     "vue": "^2.5.2",
     "vue-awesome-swiper": "^3.1.3",

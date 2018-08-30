@@ -1,6 +1,5 @@
 const mongoose = require('mongoose') // 引入Mongoose
 const Schema = mongoose.Schema // 声明Schema
-let ObjectId = Schema.Types.ObjectId // 声明Object类型
 const goodsSchema = new Schema({
   ID: {unique: true, type: String},
   GOODS_SERIAL_NUMBER: String,

@@ -1,28 +1,50 @@
-const Koa = require('koa')
-const app = new Koa()
 const Router = require('koa-router')
-let router = new Router()
 const mongoose = require('mongoose')
-const fs = require('fs')
-// 读取json文件并写入数据库
-router.get('/insertAllGoodsInfo', async (ctx) => {
-  await fs.readFile('./database/json/goods.json', 'utf8', async (err, data) => {
-    if (err) {
-      return console.error(err)
-    }
-    data = JSON.parse(data)
-    data.RECORDS.map((value, index) => {
-      if (value.IMAGE1 != null) {
-        const Goods = mongoose.model('Goods')
-        let newGoods = new Goods(value)
-        newGoods.save().then(() => {
-          console.log('成功索引:' + index)
-        }).catch(error => {
-          console.log('失败：' + error)
-        })
-      }
-    })
-  })
-  ctx.body = 'ok'
+//* **获取商品详细信息的接口
+let router = new Router()
+router.post('/getDetailGoodsInfo', async (ctx) => {
+  const Goods = mongoose.model('Goods')
+  let result = await Goods.findOne({ID: ctx.request.body.goodsId}).exec()
+  ctx.body = {code: 200, message: result}
 })
+router.get('/getDetailGoodsInfo', async (ctx) => {
+  const Goods = mongoose.model('Goods')
+  let result = await Goods.findOne({ID: ctx.request.body.goodsId}).exec()
+  ctx.body = {code: 200, message: result}
+})
+router.get('/getCategoryList', async (ctx) => {
+  try {
+    const Category = mongoose.model('Category')
+    let result = await Category.find().exec()
+    ctx.body = {code: 200, message: result}
+  } catch (err) {
+    ctx.body = {code: 500, message: err}
+  }
+})
+router.post('/getCategorySubList', async (ctx) => {
+  try {
+    let categoryId = ctx.request.body.categoryId
+    // let categoryId = 1
+    const CategorySub = mongoose.model('CategorySub')
+    let result = await CategorySub.find({MALL_CATEGORY_ID: categoryId}).exec()
+    ctx.body = {code: 200, message: result}
+  } catch (err) {
+    ctx.body = {code: 500, message: err}
+  }
+})
+router.post('/getGoodsListByCategorySubId', async (ctx) => {
+  try {
+    let categorySubId = ctx.request.body.categorySubId // 小类别
+    // let categorySubId = '2c9f6c946016ea9b016016f79c8e0000'
+    let page = ctx.request.body.page
+    let num = 10 // 每页显示数量
+    let start = (page - 1) * num
+    const Goods = mongoose.model('Goods')
+    let result = await Goods.find({SUB_ID: categorySubId}).skip(start).limit(num).exec()
+    ctx.body = {code: 200, message: result}
+  } catch (err) {
+    ctx.body = {code: 500, message: err}
+  }
+})
+
 module.exports = router
